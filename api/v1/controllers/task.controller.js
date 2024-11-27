@@ -118,3 +118,24 @@ module.exports.changeStatusMulti= async (req, res) => {
         });
     }
 };
+
+// [POST] api/v1/tasks/create
+module.exports.createTask= async (req, res) => {
+
+    try {
+        const task= new Task(req.body);
+        const data= await task.save();
+
+        res.json({
+            code:200,
+            message: "Created task successfully",
+            data:data
+        });
+    } catch (error) {
+        res.json({
+            code:400,
+            message: "Create task failed",
+        });
+    }
+
+};
