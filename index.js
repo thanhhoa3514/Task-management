@@ -1,23 +1,21 @@
 const express = require("express");
 const database = require("./config/database");
+const bodyParser = require('body-parser');
+
 require("dotenv").config();
 // const Task= require("./models/task.model")
 
 database.connect();
 const app = express();
 
-
 const port = process.env.PORT;
 
-app.get("/tasks", async (req, res) => {
+// parse application/json
+app.use(bodyParser.json());
 
-    // const tasks= await Task.find({
-    //     deleted: false
-    // });
-    // console.log(tasks);
-    // res.json(tasks)
-    res.send("Get all tasks")
-});
+
+
+
 
 app.listen(port, () => {
     console.log(`Example app Ongoing on port ${port}`);

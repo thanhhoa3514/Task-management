@@ -54,3 +54,29 @@ module.exports.detail = async (req, res, next) => {
     res.json(error);
   }
 };
+
+
+module.exports.changeStatus= async (req, res, next) =>{
+    try {
+        
+        const id=req.params.id;
+    
+        const status= req.body.status;
+        await Task.updateOne({
+            _id: id,
+           
+        },{
+            status: status
+        })
+        res.json({
+            code:200,
+            message: "Change status success",
+        })
+    }
+     catch (error) {
+        res.json({
+            code:400,
+            message: "Change status failed",
+        });
+    }
+}
