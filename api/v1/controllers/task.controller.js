@@ -56,6 +56,8 @@ module.exports.detail = async (req, res, next) => {
 };
 
 
+
+// [GET] api/v1/tasks/change-status/:id
 module.exports.changeStatus= async (req, res, next) =>{
     try {
         
@@ -80,3 +82,39 @@ module.exports.changeStatus= async (req, res, next) =>{
         });
     }
 }
+
+
+// [PATCH] api/v1/tasks/change-multi
+module.exports.changeStatusMulti= async (req, res) => {
+    try {
+        const {ids,key,value}= req.body;
+
+        switch (key) {
+            case "status":
+                await Task.updateMany({
+                    _id: { $in: ids },
+                    
+                },{
+                    status: value
+                });
+                res.json({
+                    code:200,
+                    message: "Change status multi success",
+                });
+                break;
+        
+            default:
+                res.json({
+                    code:400,
+                    message: "Not implemented",
+                });
+                break;
+        }
+        
+    } catch (error) {
+        res.json({
+            code:400,
+            message: "Change status multi failed",
+        });
+    }
+};
