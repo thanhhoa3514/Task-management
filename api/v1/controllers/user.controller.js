@@ -35,3 +35,30 @@ module.exports.register = async (req, res, next) => {
     code: 200,
   });
 };
+
+
+module.exports.login =async(req, res, next)=>{
+  const email = req.body.email;
+  const password = CryptoJS.SHA256(req.body.password).toString();
+
+  const user = await User.findOne({
+    email: email,
+    deleted: false,
+  });
+  if(user){
+    if(user.password === password){
+      const token = user.token;
+      res.cookie("token", token);
+      return res.status(200).json({
+        message: "Login successfully",
+        token: token
+      });
+    }else{
+      return res.status(401).json({
+        message: "Wrong password",
+      });
+    }
+  }else{
+    return res.status(401).json({message: "Email is not exist"});
+  }
+};
