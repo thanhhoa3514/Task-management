@@ -139,3 +139,23 @@ module.exports.createTask= async (req, res) => {
     }
 
 };
+
+// [PATCH] api/v1/tasks/edit
+module.exports.edit= async (req, res) => {
+  try {
+    const id= req.params.id;
+    await Task.findOne({
+      _id:id,
+    },req.body);
+    res.json({
+      code: 200,
+      message: "Task has been edited successfully",
+    })
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Something went wrong",
+    })
+  }
+
+};
