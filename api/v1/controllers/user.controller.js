@@ -19,7 +19,6 @@ module.exports.register = async (req, res, next) => {
       fullName: req.body.fullName,
       email: req.body.email,
       password: req.body.password,
-
     });
     await user.save();
 
@@ -28,7 +27,7 @@ module.exports.register = async (req, res, next) => {
 
     return res.status(201).json({
       message: "User registered successfully",
-      token: token
+      token: token,
     });
   } else {
     return res.status(400).json({
@@ -55,7 +54,7 @@ module.exports.login = async (req, res, next) => {
       res.cookie("token", token);
       return res.status(200).json({
         message: "Login successfully",
-        token: token
+        token: token,
       });
     } else {
       return res.status(401).json({
@@ -76,18 +75,17 @@ module.exports.forgotPassword = async (req, res) => {
     res.json({
       code: 404,
       message: "Email not found",
-    })
+    });
     return;
   }
 
   const otp = generate.randomDigit(6);
 
-
   const objectForgotPassword = {
     email: email,
     otp: otp,
-    expireAt: Date.now()
-  }
+    expireAt: Date.now(),
+  };
 
   // console.log(objectForgotPassword);
   const forgotPassword = new ForgotPassword(objectForgotPassword);
@@ -113,5 +111,37 @@ module.exports.forgotPassword = async (req, res) => {
     code: 200,
     message: "Forgot password request sent successfully",
     // email: email,
-  })
+  });
+};
+
+//  POST /api/v1/users/password/otp
+
+module.exports.forgotPasswordOTP = async (req, res) => {
+  const email = req.body.email;
+  const otp = req.body.otp;
+  const result = await ForgotPassword.findOne({
+    email: email,
+    otp: otp,
+    // expireAt: { $gt: Date.now() }
+  });
+
+  if(!result){
+    res.json({
+      code: 404,
+      message: "OTP not found or expired",
+    });
+    return;
+  }
+  const user= await User.findOne({
+    email: email,
+    deleted: false,
+  });
+
+  const token=user.token;
+  res.cookie("token", token);
+  res.json({
+    code: 200,
+    message: "Authentication your account successfully",
+    token: token,
+  });
 };
