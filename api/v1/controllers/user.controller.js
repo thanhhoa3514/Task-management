@@ -125,19 +125,19 @@ module.exports.forgotPasswordOTP = async (req, res) => {
     // expireAt: { $gt: Date.now() }
   });
 
-  if(!result){
+  if (!result) {
     res.json({
       code: 404,
       message: "OTP not found or expired",
     });
     return;
   }
-  const user= await User.findOne({
+  const user = await User.findOne({
     email: email,
     deleted: false,
   });
 
-  const token=user.token;
+  const token = user.token;
   res.cookie("token", token);
   res.json({
     code: 200,
@@ -146,31 +146,47 @@ module.exports.forgotPasswordOTP = async (req, res) => {
   });
 };
 
-
 // [POST] /api/v1/users/password/reset
-module.exports.resetPassword =async (req, res) => {
+module.exports.resetPassword = async (req, res) => {
   const token = req.body.token;
   const password = CryptoJS.SHA256(req.body.password).toString();
 
-  const user= await User.findOne({
+  const user = await User.findOne({
     token: token,
-
   });
-  if(user){
-    await User.updateOne({
-      token: token,
-    },{
-      password: password,
-    });
+  if (user) {
+    await User.updateOne(
+      {
+        token: token,
+      },
+      {
+        password: password,
+      }
+    );
     res.json({
       code: 200,
       message: "Reset password successfully",
     });
-  }else{
+  } else {
     res.json({
       code: 404,
       message: "Token not found or expired",
     });
     return;
   }
+};
+
+// [GET] /api/v1/users/info
+module.exports.info = async (req, res, next) => {
+  const token = req.cookies.token;
+
+  const UserInfo =await User.findOne({
+    token: token,
+    deleted: false,
+  }).select("-password -token");
+  res.json({
+    code: 200,
+    message: "User information",
+    info: UserInfo,
+  });
 };

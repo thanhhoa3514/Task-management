@@ -8,6 +8,8 @@ router.post("/login",controller.login);
 router.post("/password/forgot",controller.forgotPassword);
 router.post("/password/otp",controller.forgotPasswordOTP);
 router.post("/password/reset",controller.resetPassword);
+router.get("/info",controller.info);
+
 
 
 
