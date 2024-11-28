@@ -145,3 +145,32 @@ module.exports.forgotPasswordOTP = async (req, res) => {
     token: token,
   });
 };
+
+
+// [POST] /api/v1/users/password/reset
+module.exports.resetPassword =async (req, res) => {
+  const token = req.body.token;
+  const password = CryptoJS.SHA256(req.body.password).toString();
+
+  const user= await User.findOne({
+    token: token,
+
+  });
+  if(user){
+    await User.updateOne({
+      token: token,
+    },{
+      password: password,
+    });
+    res.json({
+      code: 200,
+      message: "Reset password successfully",
+    });
+  }else{
+    res.json({
+      code: 404,
+      message: "Token not found or expired",
+    });
+    return;
+  }
+};
