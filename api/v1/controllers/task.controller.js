@@ -136,6 +136,7 @@ module.exports.changeStatusMulti = async (req, res) => {
 module.exports.createTask = async (req, res) => {
 
   try {
+    req.body.createdBy=req.user.id;
     const task = new Task(req.body);
     const data = await task.save();
 

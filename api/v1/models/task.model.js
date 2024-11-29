@@ -10,7 +10,7 @@ const taskSchema = new mongoose.Schema(
     timeStart:Date,
     timeFinish: Date,
     // priority: String,
-    // createdBy: String,
+    createdBy: String,
     // updatedBy: String,
     // deletedBy: String,
     deleted: {
