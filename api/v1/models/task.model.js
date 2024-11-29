@@ -19,6 +19,7 @@ const taskSchema = new mongoose.Schema(
     // tags: Array,
     // attachments: Array,
     // notifications: Array,
+    taskParentId:String,
     deleted: {
       type: Boolean,
       default: false,
