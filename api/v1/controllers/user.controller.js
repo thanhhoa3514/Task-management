@@ -186,3 +186,13 @@ module.exports.info = async (req, res, next) => {
     info: req.user,
   });
 };
+
+// [GET] api/v1/users/list-user
+module.exports.listUser= async (req, res, next) => {
+  const users = await User.find({ deleted: false }).select("fullName email");
+  res.json({
+    code: 200,
+    message: "List user",
+    users: users,
+  });
+}

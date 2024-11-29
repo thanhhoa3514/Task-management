@@ -13,6 +13,12 @@ const taskSchema = new mongoose.Schema(
     createdBy: String,
     // updatedBy: String,
     // deletedBy: String,
+    listUser:Array,
+    // comments: Array,
+    // attachments: Array,
+    // tags: Array,
+    // attachments: Array,
+    // notifications: Array,
     deleted: {
       type: Boolean,
       default: false,
