@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const generateStringRandom = require("../../../helpers/generateStringRandom");
+
 
 
 const userSchema = new mongoose.Schema(
@@ -7,10 +7,7 @@ const userSchema = new mongoose.Schema(
     fullName: String,
     email:String,
     password: String,
-    token:{
-        type:String,
-        default:generateStringRandom.generateStringRandom(30)
-    },
+    token:String,
     deleted: {
       type: Boolean,
       default: false,
