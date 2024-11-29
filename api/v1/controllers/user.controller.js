@@ -4,7 +4,7 @@ const ForgotPassword = require("../models/forgot-password.model");
 
 const generate = require("../../../helpers/generateStringRandom");
 const sendMailHelpers = require("../../../helpers/sendMail");
-
+// const authMiddleware = require("../middlewares/auth.middleware");
 // [POST] /api/v1/users/register
 module.exports.register = async (req, res, next) => {
   req.body.password = CryptoJS.SHA256(req.body.password).toString();
@@ -179,15 +179,10 @@ module.exports.resetPassword = async (req, res) => {
 
 // [GET] /api/v1/users/info
 module.exports.info = async (req, res, next) => {
-  const token = req.cookies.token;
-
-  const UserInfo =await User.findOne({
-    token: token,
-    deleted: false,
-  }).select("-password -token");
+  
   res.json({
     code: 200,
     message: "User information",
-    info: UserInfo,
+    info: req.user,
   });
 };
